@@ -34,9 +34,10 @@ public class PacienteController {
     }
 
     @GetMapping
-    public Page<DadosListaPaciente> listPaciente(Pageable paginacao){
+    public ResponseEntity<Page<DadosListaPaciente>> listPaciente(Pageable paginacao){
 
-        return repository.findAll(paginacao).map(DadosListaPaciente::new);
+        var page =  repository.findAll(paginacao).map(DadosListaPaciente::new);
+        return ResponseEntity.ok(page);
     }
 
 }
