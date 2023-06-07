@@ -22,19 +22,19 @@ public class MedicoController {
     public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroMedico dados, UriComponentsBuilder
                                     uriComponentsBuilder){
         var medico = MedicoMapper.INSTANCE.toMedico(dados);
-       repository.save(medico);
+        repository.save(medico);
        var uri = uriComponentsBuilder.path("/medicos/{id}").buildAndExpand(medico.getId()).toUri();
        return ResponseEntity.created(uri).body(new DadosDetalhamentoMedico(medico));
 
     }
 
     @GetMapping
-    public ResponseEntity<Page<DadosListagemMedico>> listar(@PageableDefault(size = 10, sort ={ "nome"}) Pageable paginacao){
+    public Page<DadosListagemMedico> listar(@PageableDefault(size = 10, sort ={"nome"}) Pageable paginacao){
         var page = repository.findAllByAtivoTrue(paginacao).map(
                 DadosListagemMedico::new
         );
 
-        return ResponseEntity.ok(page);
+        return page;
     }
 
     @PutMapping

@@ -8,6 +8,7 @@ import org.mapstruct.factory.Mappers;
 @Mapper(componentModel = "spring")
 public abstract class MedicoMapper {
     public static final  MedicoMapper INSTANCE = Mappers.getMapper(MedicoMapper.class);
+
     public abstract Medico toMedico( DadosCadastroMedico dadosCadastroMedico);
 
 
