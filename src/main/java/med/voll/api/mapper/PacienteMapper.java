@@ -1,7 +1,7 @@
 package med.voll.api.mapper;
 
-import med.voll.api.paciente.DadosCadastroPaciente;
-import med.voll.api.paciente.Paciente;
+import med.voll.api.domain.paciente.DadosCadastroPaciente;
+import med.voll.api.domain.paciente.Paciente;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
