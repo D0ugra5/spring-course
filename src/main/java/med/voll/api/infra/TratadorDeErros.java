@@ -8,10 +8,13 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.http.HttpStatus;
+
 
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 @RestControllerAdvice
 public class TratadorDeErros {
     @ExceptionHandler(EntityNotFoundException.class)
@@ -26,10 +29,23 @@ public class TratadorDeErros {
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity trataChaveDuplicada(DataIntegrityViolationException ex){
-        String erroCampo = ex.getLocalizedMessage();
+    public ResponseEntity handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+        String errorMessage = ex.getRootCause().getMessage();
 
-        return ResponseEntity.badRequest().body(new DadosErrosValidacoes("Erro de Chave Duplicada",erroCampo));
+        // Extrair o campo usando expressões regulares
+        Pattern pattern = Pattern.compile("'(.*?)'");
+        Matcher matcher = pattern.matcher(errorMessage);
+        String fieldName = "";
+        if (matcher.find()) {
+            fieldName = matcher.group(0);
+            System.out.println(matcher);
+        }
+
+        if (!fieldName.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new DadosErrosValidacoes(fieldName,"Chave duplicada encontrada no campo"));
+        }
+
+        return ResponseEntity.badRequest().body("Erro Interno");
     }
 
 
