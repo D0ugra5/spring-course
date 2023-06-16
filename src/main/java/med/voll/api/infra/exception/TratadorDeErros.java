@@ -2,21 +2,26 @@ package med.voll.api.infra.exception;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.DuplicateKeyException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.http.HttpStatus;
 
-
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 @RestControllerAdvice
 public class TratadorDeErros {
+
+    @ExceptionHandler(TokenInvalidException.class)
+    public ResponseEntity invalidToken(TokenInvalidException ex){
+        System.out.println("ENTREI AQUI NO METODO DE ERRO ");
+        return ResponseEntity.status(HttpStatus.OK).body(new DadosErrosToken(ex.getMessage()));
+    }
+
+
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity tratarErro404() {
         return ResponseEntity.notFound().build();
@@ -70,6 +75,17 @@ public class TratadorDeErros {
         }
 
     };
+
+
+    private record DadosErrosToken(String message){
+        public DadosErrosToken(String message){
+
+            this.message =message;
+        }
+    }
+
+
+
 
 
 }
