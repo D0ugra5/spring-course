@@ -23,5 +23,7 @@ public class Paciente {
     @Embedded
     private Endereco endereco;
 
+    private boolean ativo ;
+
 
 }

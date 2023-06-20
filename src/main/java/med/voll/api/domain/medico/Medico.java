@@ -12,7 +12,7 @@ import med.voll.api.domain.endereco.Endereco;
 @Builder
 @EqualsAndHashCode(of ="id")
 public class Medico {
-    private boolean ativo = true;
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String nome;
@@ -24,7 +24,7 @@ public class Medico {
 
     @Embedded
     private Endereco endereco;
-
+    private boolean ativo;
 
     public Medico(DadosCadastroMedico dados) {
         this.ativo = true;
