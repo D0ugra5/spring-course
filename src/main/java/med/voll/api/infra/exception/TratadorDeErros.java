@@ -40,6 +40,11 @@ public class TratadorDeErros {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Acesso negado");
     }
 
+    @ExceptionHandler(ValidacaoException.class)
+    public ResponseEntity tratarErroRegradeNegocio(ValidacaoException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new DadosErrosGenerics(ex.getMessage()));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity tratarErro500(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro: " +ex.getLocalizedMessage());
@@ -113,6 +118,11 @@ public class TratadorDeErros {
             this.message =message;
         }
     }
+
+
+    private record DadosErrosGenerics(String message){
+    }
+
 
 
 
